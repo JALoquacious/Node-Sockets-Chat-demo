@@ -1,3 +1,5 @@
+const socket = io();
+
 $(() => {
     $('#send').click(() => {
         postMessage({
@@ -28,3 +30,5 @@ function getMessages() {
 function postMessage(msg) {
     $.post('http://localhost:3000/messages', msg);
 }
+
+socket.on('message', appendMessage);
