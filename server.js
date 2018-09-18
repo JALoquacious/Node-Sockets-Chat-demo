@@ -28,24 +28,24 @@ app.get('/messages', (req, res) => {
 app.post('/messages', (req, res) => {
     const message = new Message(req.body);
 
-    message.save((err) => {
-        if (err) res.sendStatus(500);
-
-        Message.findOne({
+    message.save()
+    .then(() => {
+        console.log('Message saved.');
+        return Message.findOne({
             content: /{?[0-9A-F]{8}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{12}\}?/gi
-         }, (err, GUID) => {
-            if (GUID) {
-                io.emit('guidError');
-                Message.deleteOne({ _id: GUID.id }, (err) => {
-                    if (err) {
-                        console.log('Error removing illegal GUID from message.');
-                    }
-                });
-            }
-         });
-
+        })
+    })
+    .then((GUID) => {
+        if (GUID) {
+            io.emit('guidError');
+            return Message.deleteOne({ _id: GUID.id });
+        }
         io.emit('message', req.body);
         res.sendStatus(200);
+    })
+    .catch((err) => {
+        res.sendStatus(500);
+        return console.error(`A server error occurred: ${err}`);
     });
 });
 

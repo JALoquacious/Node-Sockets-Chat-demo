@@ -32,9 +32,16 @@ function postMessage(msg) {
     $.post('http://localhost:3000/messages', msg);
 }
 
-function showErrorAlert() {
+function showGuidErrorAlert() {
     $('#guid-error').css('display', 'block');
 }
 
-socket.on('message', appendMessage);
-socket.on('guidError', showErrorAlert);
+function hideGuidErrorAlert() {
+    $('#guid-error').hide();
+}
+
+socket.on('message', (msg) => {
+    hideGuidErrorAlert();
+    appendMessage(msg);
+});
+socket.on('guidError', showGuidErrorAlert);
