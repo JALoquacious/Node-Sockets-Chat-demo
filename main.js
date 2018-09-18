@@ -1,4 +1,5 @@
 const socket = io();
+let errorFlag = false;
 
 $(() => {
     $('#send').click(() => {
@@ -31,4 +32,9 @@ function postMessage(msg) {
     $.post('http://localhost:3000/messages', msg);
 }
 
+function showErrorAlert() {
+    $('#guid-error').css('display', 'block');
+}
+
 socket.on('message', appendMessage);
+socket.on('guidError', showErrorAlert);

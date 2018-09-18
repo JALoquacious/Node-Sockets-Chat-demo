@@ -22,7 +22,7 @@
     <body>
         <br>
         <div class="container">
-            <div class="jumbotron">
+            <div class="jumbotron" style="padding:2rem">
                 <h1 class="display-4">Send Message</h1>
                 <br>
                 <input id="name" class="form-control" placeholder="Name">
@@ -30,6 +30,10 @@
                 <textarea id="content" class="form-control" placeholder="Message"></textarea>
                 <br>
                 <button id="send" class="btn btn-success">Send</button>
+                <div id="guid-error" class="alert alert-danger" style="display:none; margin-top:1em">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error</strong> Cannot send sensitive GUID information over this service.
+                </div>
             </div>
             <div id="messages"></div>
         </div>

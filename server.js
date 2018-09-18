@@ -31,6 +31,19 @@ app.post('/messages', (req, res) => {
     message.save((err) => {
         if (err) res.sendStatus(500);
 
+        Message.findOne({
+            content: /{?[0-9A-F]{8}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{12}\}?/gi
+         }, (err, GUID) => {
+            if (GUID) {
+                io.emit('guidError');
+                Message.deleteOne({ _id: GUID.id }, (err) => {
+                    if (err) {
+                        console.log('Error removing illegal GUID from message.');
+                    }
+                });
+            }
+         });
+
         io.emit('message', req.body);
         res.sendStatus(200);
     });
