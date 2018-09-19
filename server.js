@@ -25,28 +25,26 @@ app.get('/messages', (req, res) => {
     });
 });
 
-app.post('/messages', (req, res) => {
-    const message = new Message(req.body);
-
-    message.save()
-    .then(() => {
-        console.log('Message saved.');
-        return Message.findOne({
+app.post('/messages', async (req, res) => {
+    try {
+        const message = new Message(req.body);
+        const savedMessage = await message.save();
+        const guid = await Message.findOne({
             content: /{?[0-9A-F]{8}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{4}-?[0-9A-F]{12}\}?/gi
-        })
-    })
-    .then((GUID) => {
-        if (GUID) {
+        });
+    
+        if (guid) {
             io.emit('guidError');
-            return Message.deleteOne({ _id: GUID.id });
+            await Message.deleteOne({ _id: guid.id });
+        } else {
+            io.emit('message', req.body);
         }
-        io.emit('message', req.body);
         res.sendStatus(200);
-    })
-    .catch((err) => {
+
+    } catch (err) {
         res.sendStatus(500);
         return console.error(`A server error occurred: ${err}`);
-    });
+    }
 });
 
 io.on('connect', (socket) => {

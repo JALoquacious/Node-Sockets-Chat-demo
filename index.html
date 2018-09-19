@@ -18,12 +18,17 @@
 <script src="main.js"></script>
 
 <html>
-    <head></head>
+    <head>
+        <title>Websockets Chat</title>
+    </head>
     <body>
         <br>
         <div class="container">
-            <div class="jumbotron" style="padding:2rem">
-                <h1 class="display-4">Send Message</h1>
+            <header>
+                <h1>Websockets Chat</h1>
+            </header>
+            <div class="jumbotron" style="padding:1rem">
+                <h2>Send Message</h2>
                 <br>
                 <input id="name" class="form-control" placeholder="Name">
                 <br>
@@ -32,7 +37,7 @@
                 <button id="send" class="btn btn-success">Send</button>
                 <div id="guid-error" class="alert alert-danger" style="display:none; margin-top:1em">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Error</strong> Cannot send sensitive GUID information over this service.
+                    <strong>Error:</strong> Cannot send sensitive GUID information over this service.
                 </div>
             </div>
             <div id="messages"></div>
